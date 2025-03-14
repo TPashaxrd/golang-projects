@@ -1,6 +1,11 @@
 {
   "first_name": "Toprak",
   "last_name": "TPashaxrd",
-  "age": 99999999999,
-  "time": "2025-03-14T19:11:16.9522101+03:00"
+  "email": "example@example.com",
+  "age": 25,
+  "gender": "Male",
+  "ip_address": "1.1.1.1",
+  "country": "TURKIYE",
+  "city_name": "GITHUB",
+  "time": "2025-03-14T21:51:33.9052067+03:00"
 }

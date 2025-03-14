@@ -13,13 +13,23 @@ import (
 type Name struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
+	EMail     string `json:"email"`
 	Age       int    `json:"age"`
+	Gender    string `json:"gender"`
+	Country   string `json:"country"`
+	CityName  string `json:"city_name"`
+	IpAddress string `json:"ip_address"`
 }
 
 type LogEntry struct {
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
+	EMail     string     `json:"email"`
 	Age       int       `json:"age"`
+	Gender    string    `json:"gender"`
+	IpAddress string    `json:"ip_address"`
+	Country   string    `json:"country"`
+	CityName  string    `json:"city_name"`
 	Time      time.Time `json:"time"`
 }
 
@@ -43,7 +53,12 @@ func logToFile(logEntry LogEntry) error {
 func usersHandler(w http.ResponseWriter, r *http.Request) {
 	firstName := r.URL.Query().Get("first_name")
 	lastName := r.URL.Query().Get("last_name")
+	gender := r.URL.Query().Get("gender")
 	ageStr := r.URL.Query().Get("age")
+	email := r.URL.Query().Get("email")
+	ipAddress := r.URL.Query().Get("ip_address")
+	country := r.URL.Query().Get("country")
+	city_name := r.URL.Query().Get("city_name")
 
 	age, err := strconv.Atoi(ageStr)
 	if err != nil {
@@ -54,13 +69,23 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 	response := Name{
 		FirstName: firstName,
 		LastName:  lastName,
+		EMail:     email,
 		Age:       age,
+		Gender:    gender,
+		Country:   country,
+		CityName:  city_name,
+		IpAddress: ipAddress,
 	}
 
 	logEntry := LogEntry{
 		FirstName: firstName,
 		LastName:  lastName,
+		EMail:     email,
 		Age:       age,
+		Gender:    gender,
+		IpAddress: ipAddress,
+		Country:   country,
+		CityName:  city_name,
 		Time:      time.Now(),
 	}
 

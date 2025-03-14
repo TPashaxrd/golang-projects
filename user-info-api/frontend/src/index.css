@@ -4,7 +4,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
 /* 
 ! font-family: Space Grotesk, serif;
 ! font-family: Roboto Condensed, serif;
@@ -21,7 +20,13 @@ body {
   height: 100vh;
   margin: 0;
 }
-
+::selection {
+  background-color: blue;
+  color: white;
+}
+::-webkit-scrollbar {
+  display: none;
+}
 input {
   font-family: 'Inter', sans-serif;
   padding: 10px 15px;
@@ -54,6 +59,7 @@ button:active {
   transform: scale(0.98);
 }
 p {
+  user-select: none;
   font-size: 20px;
   color: #333;
   font-weight: 600;
