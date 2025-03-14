@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+/* 
+! font-family: Space Grotesk, serif;
+! font-family: Roboto Condensed, serif;
+! font-family: Atkinson Hyperlegible Next serif;
+! font-family: 'Montserrat', serif;
+! font-family: 'Inter', sans-serif;
+*/
+body {
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+input {
+  font-family: 'Inter', sans-serif;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  width: 300px;
+  transition: border-color 0.3s ease;
+}
+input:focus {
+  outline: none;
+  border-color: #4facfe;
+}
+button {
+  background: #4facfe;
+  border-radius: 10px;
+  padding: 12px 20px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+button:hover {
+  background: #00f2fe;
+  transform: scale(1.05);
+}
+button:active {
+  transform: scale(0.98);
+}
+p {
+  font-size: 20px;
+  color: #333;
+  font-weight: 600;
+  margin-top: 20px;
+}
