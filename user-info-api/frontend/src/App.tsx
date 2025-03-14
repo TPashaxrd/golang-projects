@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const GreetUser = () => {
+  const [logs, setLogs] = useState<string[]>([]);
+  const ipInputRef = useRef(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [greeting, setGreeting] = useState("");
@@ -41,7 +43,7 @@ const GreetUser = () => {
           setIpAddress(data.ipAddress);
           setCountry(data.countryName.toUpperCase());
           setCity(data.cityName.toUpperCase());
-          console.log("IP Alındı:", data.ipAddress, "Ülke:", data.countryName);
+          // console.log("IP Alındı:", data.ipAddress, "Ülke:", data.countryName);
         } else {
           console.warn("IP API'den boş döndü.");
         }
@@ -52,6 +54,26 @@ const GreetUser = () => {
 
     getIp();
   }, []);
+
+    useEffect(() => {
+      const getLogs = async () => {
+        const urlone = `http://localhost:8080/logs`;
+        try {
+          const response = await fetch(urlone);
+          if (response.ok) {
+            const logData = await response.json();
+            setLogs(logData);
+            console.log("Başarılı bir şekilde API'den veri alındı.");
+          } else {
+            console.error("API'den veri alınırken hata oluştu");
+          }
+        } catch (error) {
+          console.error("Fetch hatası:", error);
+        }
+      };
+
+      getLogs();
+    }, []);
 
   const handleGreet = async () => {
     if (!firstName || !lastName || !currencyAge || !gender || !ipAddress) {
@@ -87,13 +109,18 @@ const GreetUser = () => {
   };
 
   const handleCopyIP = () => {
-    if (ipAddress) {
-      navigator.clipboard.writeText(ipAddress);
-      console.log("IP Kopyalandı:", ipAddress);
-    }
-  };
+    navigator.clipboard.writeText(ipAddress || "31");
+};
+
 
   return (
+    <>
+    {/* About LOG */}
+    {/* <div>
+      {logs.map((log, index) => (
+        <li
+      ))}
+    </div> */}
     <div className="flex flex-col w-full h-full placeholder:bg-gray-300">
       <h2>
         Created by {name},{" "}
@@ -105,6 +132,7 @@ const GreetUser = () => {
       <input type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
 
       <div className="flex gap-2 mt-2">
+        <div className="w-1/2 flex flex-col gap-2">
         <button
           onClick={() => setGender("Male")}
           className={`w-1/2 p-2 rounded-md ${gender === "Male" ? "bg-blue-700 text-white" : "bg-gray-300"}`}
@@ -117,14 +145,14 @@ const GreetUser = () => {
         >
           Female
         </button>
+        </div>
       </div>
       <input type="mail" onChange={(e) => setEmail(e.target.value)} placeholder="Email" value={email} />
       <div className="flex gap-2 mt-2">
-        <input type="text" placeholder="Your Country" value={country} disabled />
-        <input type="text" onClick={handleCopyIP} className="cursor-pointer" value={ipAddress || "IP Alınıyor..."} disabled />
-        <input type="text" value={city} disabled />
+        <input type="text" placeholder="Your Country" value={country} disabled className="cursor-pointer" />
+        <input type="text" placeholder="Your City" value={city} disabled />
+        <input type="text" onClick={handleCopyIP} className="cursor-pointer bg-[#34C3FE] bg-opacity-50" value={ipAddress || "IP Alınıyor..."} readOnly />
       </div>
-
       <input
         type="number"
         min={10}
@@ -139,6 +167,7 @@ const GreetUser = () => {
       </button>
       {greeting && <p>{greeting}</p>}
     </div>
+    </>
   );
 };
 

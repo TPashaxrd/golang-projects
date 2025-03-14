@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/rs/cors"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -24,7 +25,7 @@ type Name struct {
 type LogEntry struct {
 	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
-	EMail     string     `json:"email"`
+	EMail     string    `json:"email"`
 	Age       int       `json:"age"`
 	Gender    string    `json:"gender"`
 	IpAddress string    `json:"ip_address"`
@@ -40,14 +41,19 @@ func logToFile(logEntry LogEntry) error {
 	}
 	defer file.Close()
 
+	var logs []LogEntry
+	data, _ := ioutil.ReadFile("logs.json")
+	json.Unmarshal(data, &logs)
+
+	logs = append(logs, logEntry)
+
+	file.Truncate(0)
+	file.Seek(0, 0)
 	encoder := json.NewEncoder(file)
 	encoder.SetIndent("", "  ")
-	err = encoder.Encode(logEntry)
-	if err != nil {
-		return err
-	}
+	err = encoder.Encode(logs)
 
-	return nil
+	return err
 }
 
 func usersHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +64,7 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.URL.Query().Get("email")
 	ipAddress := r.URL.Query().Get("ip_address")
 	country := r.URL.Query().Get("country")
-	city_name := r.URL.Query().Get("city_name")
+	cityName := r.URL.Query().Get("city_name")
 
 	age, err := strconv.Atoi(ageStr)
 	if err != nil {
@@ -73,7 +79,7 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 		Age:       age,
 		Gender:    gender,
 		Country:   country,
-		CityName:  city_name,
+		CityName:  cityName,
 		IpAddress: ipAddress,
 	}
 
@@ -85,7 +91,7 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 		Gender:    gender,
 		IpAddress: ipAddress,
 		Country:   country,
-		CityName:  city_name,
+		CityName:  cityName,
 		Time:      time.Now(),
 	}
 
@@ -99,8 +105,28 @@ func usersHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func logsHandler(w http.ResponseWriter, r *http.Request) {
+	file, err := os.Open("logs.json")
+	if err != nil {
+		http.Error(w, "Log dosyası açılamadı", http.StatusInternalServerError)
+		return
+	}
+	defer file.Close()
+
+	bytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		http.Error(w, "Dosya okuma hatası", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(bytes)
+}
+
 func main() {
 	http.HandleFunc("/users", usersHandler)
+	http.HandleFunc("/logs", logsHandler)
+
 	handler := cors.Default().Handler(http.DefaultServeMux)
 
 	fmt.Println("API is working at... http://localhost:8080")
